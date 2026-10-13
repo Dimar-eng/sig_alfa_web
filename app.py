@@ -2,12 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import psycopg2
 import os
 from datetime import datetime
-from zoneinfo import ZoneInfo  # Para manejar la hora exacta de Colombia
+from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'sig_alfa_clave_secreta_admin')
 
-DATABASE_URL = os.environ.get('DATABASE_URL') or 'postgresql://postgres:tu_contraseña@localhost:5432/sig_alfa'
+DATABASE_URL = os.environ.get('DATABASE_URL') or 'postgresql://postgres:DMR007@localhost:5432/sig_alfa'
 
 def get_db_connection():
     return psycopg2.connect(DATABASE_URL)
@@ -30,7 +30,7 @@ def init_db():
                 contacto_emergencia VARCHAR(100),
                 email VARCHAR(100),
                 observaciones TEXT,
-                fecha_registro TIMESTAMP
+                fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """)
         conn.commit()
@@ -72,9 +72,9 @@ def guardar():
         email = request.form.get('email')
         observaciones = request.form.get('observaciones')
         
-        # Obtenemos la hora actual exacta de Colombia
+        # Obtener la hora actual exacta en Colombia
         colombia_tz = ZoneInfo("America/Bogota")
-        fecha_actual = datetime.now(colombia_tz).strftime('%Y-%m-%d %H:%M:%S')
+        fecha_registro = datetime.now(colombia_tz)
 
         score, recomendacion = calcular_diagnostico(kit, atencion, condicion)
 
@@ -85,7 +85,7 @@ def guardar():
                 INSERT INTO evaluaciones_sensoriales 
                 (nombre_estudiante, identificacion, edad, condicion, kit_utilizado, nivel_atencion, adulto_responsable, telefono, contacto_emergencia, email, observaciones, fecha_registro)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (nombre, identificacion, edad, condicion, kit, atencion, adulto, telefono, emergencia, email, observaciones, fecha_actual))
+            """, (nombre, identificacion, edad, condicion, kit, atencion, adulto, telefono, emergencia, email, observaciones, fecha_registro))
             conn.commit()
             cur.close()
             conn.close()
@@ -119,7 +119,14 @@ def admin_dashboard():
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("SELECT * FROM evaluaciones_sensoriales ORDER BY id DESC;")
+        # Consultar formateando la fecha a la zona horaria de Colombia y al formato DD/MM/YYYY HH12:MI:SS AM
+        cur.execute("""
+            SELECT id, nombre_estudiante, identificacion, edad, condicion, kit_utilizado, 
+                   nivel_atencion, adulto_responsable, telefono, contacto_emergencia, email, observaciones, 
+                   TO_CHAR(fecha_registro AT TIME ZONE 'America/Bogota', 'DD/MM/YYYY HH12:MI:SS AM') 
+            FROM evaluaciones_sensoriales 
+            ORDER BY id DESC;
+        """)
         evaluaciones = cur.fetchall()
         cur.close()
         conn.close()
