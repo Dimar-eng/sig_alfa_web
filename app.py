@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'sig_alfa_clave_secreta_admin')
 
-DATABASE_URL = os.environ.get('DATABASE_URL') or 'postgresql://postgres:DMR007@localhost:5432/sig_alfa'
+DATABASE_URL = os.environ.get('DATABASE_URL') or 'postgresql://postgres:tu_contraseña@localhost:5432/sig_alfa'
 
 def get_db_connection():
     return psycopg2.connect(DATABASE_URL)
@@ -20,13 +20,13 @@ def init_db():
             CREATE TABLE IF NOT EXISTS evaluaciones_sensoriales (
                 id SERIAL PRIMARY KEY,
                 nombre_estudiante VARCHAR(100) NOT NULL,
-                identificacion VARCHAR(50),
+                identificacion VARCHAR(50) UNIQUE,
                 edad INT NOT NULL,
                 condicion VARCHAR(50) NOT NULL,
                 kit_utilizado VARCHAR(100) NOT NULL,
                 nivel_atencion VARCHAR(20) NOT NULL,
                 adulto_responsable VARCHAR(100),
-                telefono VARCHAR(20),
+                telefono VARCHAR(20) UNIQUE,
                 contacto_emergencia VARCHAR(100),
                 email VARCHAR(100),
                 observaciones TEXT,
@@ -72,24 +72,39 @@ def guardar():
         email = request.form.get('email')
         observaciones = request.form.get('observaciones')
         
-        # Obtener la hora actual exacta en Colombia
-        colombia_tz = ZoneInfo("America/Bogota")
-        fecha_registro = datetime.now(colombia_tz)
-
-        score, recomendacion = calcular_diagnostico(kit, atencion, condicion)
-
         try:
             conn = get_db_connection()
             cur = conn.cursor()
+
+            # 1. Validar si ya existe la identificación o el teléfono en la base de datos
+            cur.execute("""
+                SELECT identificacion, telefono FROM evaluaciones_sensoriales 
+                WHERE identificacion = %s OR telefono = %s
+            """, (identificacion, telefono))
+            duplicado = cur.fetchone()
+
+            if duplicado:
+                cur.close()
+                conn.close()
+                flash("⚠️ Error: Ya existe una evaluación registrada con esta Identificación o número de Teléfono.", "danger")
+                return redirect(url_for('index'))
+
+            # 2. Obtener la hora local exacta de Colombia sin desfase UTC
+            colombia_tz = ZoneInfo("America/Bogota")
+            fecha_registro = datetime.now(colombia_tz).replace(tzinfo=None)
+
+            # 3. Insertar el nuevo registro
             cur.execute("""
                 INSERT INTO evaluaciones_sensoriales 
                 (nombre_estudiante, identificacion, edad, condicion, kit_utilizado, nivel_atencion, adulto_responsable, telefono, contacto_emergencia, email, observaciones, fecha_registro)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (nombre, identificacion, edad, condicion, kit, atencion, adulto, telefono, emergencia, email, observaciones, fecha_registro))
+            
             conn.commit()
             cur.close()
             conn.close()
             
+            score, recomendacion = calcular_diagnostico(kit, atencion, condicion)
             return render_template('exito.html', 
                                    nombre=nombre, 
                                    kit=kit, 
@@ -97,7 +112,7 @@ def guardar():
                                    atencion=atencion, 
                                    recomendacion=recomendacion)
         except Exception as e:
-            flash(f"Error al guardar: {e}", "danger")
+            flash(f"Error al procesar el registro: {e}", "danger")
             return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -119,11 +134,11 @@ def admin_dashboard():
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        # Consultar formateando la fecha a la zona horaria de Colombia y al formato DD/MM/YYYY HH12:MI:SS AM
+        # Consultar formateando la fecha correctamente
         cur.execute("""
             SELECT id, nombre_estudiante, identificacion, edad, condicion, kit_utilizado, 
                    nivel_atencion, adulto_responsable, telefono, contacto_emergencia, email, observaciones, 
-                   TO_CHAR(fecha_registro AT TIME ZONE 'America/Bogota', 'DD/MM/YYYY HH12:MI:SS AM') 
+                   TO_CHAR(fecha_registro, 'DD/MM/YYYY HH12:MI:SS AM') 
             FROM evaluaciones_sensoriales 
             ORDER BY id DESC;
         """)
