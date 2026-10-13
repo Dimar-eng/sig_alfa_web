@@ -86,7 +86,7 @@ def guardar():
             if duplicado:
                 cur.close()
                 conn.close()
-                flash("⚠️ Error: Ya existe una evaluación registrada con esta Identificación o número de Teléfono.", "danger")
+                flash("Ya existe una evaluación registrada con esta Identificación o número de teléfono.", "danger")
                 return redirect(url_for('index'))
 
             # 2. Obtener la hora local exacta de Colombia sin desfase UTC
