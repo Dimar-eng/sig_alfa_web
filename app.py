@@ -58,12 +58,12 @@ def index():
 @app.route('/guardar', methods=['POST'])
 def guardar():
     if request.method == 'POST':
-        nombre = request.form.get('nombre_estudiante')
+        nombre = request.form.get('nombre_estudiante') or request.form.get('nombre_paciente') or request.form.get('nombre')
         identificacion = request.form.get('identificacion')
         edad = request.form.get('edad')
         condicion = request.form.get('condicion')
-        kit = request.form.get('kit_utilizado')
-        atencion = request.form.get('nivel_atencion')
+        kit = request.form.get('kit_utilizado') or request.form.get('kit')
+        atencion = request.form.get('nivel_atencion') or request.form.get('atencion')
         adulto = request.form.get('adulto_responsable')
         telefono = request.form.get('telefono')
         emergencia = request.form.get('contacto_emergencia')

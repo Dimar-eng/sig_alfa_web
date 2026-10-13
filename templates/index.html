@@ -18,28 +18,28 @@
                 <!-- Nombre del Paciente -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Nombre del Paciente *</label>
-                    <input type="text" name="nombre_paciente" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <input type="text" name="nombre_paciente" value="Santiago Pérez" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
                 <!-- Identificación -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Identificación (T.I. / C.C.) *</label>
-                    <input type="text" name="identificacion" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <input type="text" name="identificacion" value="1023456789" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
                 <!-- Edad -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Edad *</label>
-                    <input type="number" name="edad" required min="1" max="120" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <input type="number" name="edad" value="8" required min="1" max="120" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
-                <!-- Condición -->
+                <!-- Condición / Diagnóstico -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Condición *</label>
                     <select name="condicion" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                         <option value="">Seleccione una opción...</option>
                         <option value="TDAH">TDAH</option>
-                        <option value="Autismo">Autismo (TEA)</option>
+                        <option value="Autismo" selected>Autismo (TEA)</option>
                         <option value="Síndrome de Down">Síndrome de Down</option>
                         <option value="Desarrollo Típico">Desarrollo Típico</option>
                     </select>
@@ -50,7 +50,7 @@
                     <label class="block text-sm font-medium text-slate-700 mb-1">Kit Sensorial Utilizado *</label>
                     <select name="kit_utilizado" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                         <option value="">Seleccione un kit...</option>
-                        <option value="Kit Táctil de Alta Textura">Kit Táctil de Alta Textura</option>
+                        <option value="Kit Táctil de Alta Textura" selected>Kit Táctil de Alta Textura</option>
                         <option value="Kit Auditivo y Visual Suave">Kit Auditivo y Visual Suave</option>
                         <option value="Kit Motriz Fina y Formas">Kit Motriz Fina y Formas</option>
                         <option value="Kit Dinámico Integral">Kit Dinámico Integral</option>
@@ -62,7 +62,7 @@
                     <label class="block text-sm font-medium text-slate-700 mb-1">Nivel de Atención Observado *</label>
                     <select name="nivel_atencion" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                         <option value="">Seleccione nivel...</option>
-                        <option value="Alto">Alto</option>
+                        <option value="Alto" selected>Alto</option>
                         <option value="Medio">Medio</option>
                         <option value="Bajo">Bajo</option>
                     </select>
@@ -71,32 +71,32 @@
                 <!-- Adulto Responsable -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Adulto Responsable</label>
-                    <input type="text" name="adulto_responsable" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nombre del adulto responsable">
+                    <input type="text" name="adulto_responsable" value="María Pérez (Madre)" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
                 <!-- Teléfono -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Teléfono de Contacto</label>
-                    <input type="tel" name="telefono" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Ej. 314*******">
+                    <input type="tel" name="telefono" value="3104567890" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
                 <!-- Contacto de Emergencia -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Contacto de Emergencia</label>
-                    <input type="text" name="contacto_emergencia" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nombre y teléfono de emergencia">
+                    <input type="text" name="contacto_emergencia" value="Carlos Pérez - 3119876543" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
                 <!-- Email -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Correo Electrónico</label>
-                    <input type="email" name="email" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="correo@ejemplo.com">
+                    <input type="email" name="email" value="maria.perez@ejemplo.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
             </div>
 
             <!-- Observaciones -->
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">Observaciones</label>
-                <textarea name="observaciones" rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Describa reacciones o notas relevantes..."></textarea>
+                <textarea name="observaciones" rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">El estudiante mostró excelente receptividad al kit táctil y mantuvo la concentración durante toda la actividad.</textarea>
             </div>
 
             <div class="pt-2">
