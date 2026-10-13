@@ -113,7 +113,15 @@ def admin_dashboard():
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("SELECT * FROM evaluaciones_sensoriales ORDER BY id DESC;")
+        # Fecha formateada limpia con TO_CHAR
+        cur.execute("""
+            SELECT id, nombre_estudiante, identificacion, edad, condicion, kit_utilizado, 
+                   nivel_atencion, adulto_responsable, telefono, contacto_emergencia, 
+                   email, observaciones, 
+                   TO_CHAR(fecha_registro, 'YYYY-MM-DD HH:MI') 
+            FROM evaluaciones_sensoriales 
+            ORDER BY id DESC;
+        """)
         evaluaciones = cur.fetchall()
         cur.close()
         conn.close()
