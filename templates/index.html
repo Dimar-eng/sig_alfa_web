@@ -3,125 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIG-ALFA | Banco de Datos y Alfabetización Sensorial</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>SIG-ALFA - Evaluación Sensorial</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 min-h-screen py-10 px-4">
+    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-800">SIG-ALFA</h1>
+            <p class="text-slate-600 mt-2">Sistema de Evaluación y Seguimiento Sensorial</p>
+        </div>
 
-    <!-- Header / Navbar -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="bg-indigo-600 text-white p-2.5 rounded-xl font-bold text-xl shadow-md"></div>
+        <form action="/guardar" method="POST" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nombre del Paciente -->
                 <div>
-                    <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">SIG-ALFA</h1>
-                    <p class="text-xs text-slate-500 font-medium">Sistema de Información Sensorial & Datos</p>
-                </div>
-            </div>
-            <nav class="flex items-center space-x-4">
-                <a href="/login" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-4 py-2 rounded-lg transition">Panel Admin</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-6 py-12 flex-grow w-full">
-        
-        <!-- Hero Section -->
-        <div class="text-center mb-10">
-            <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3">Banco de Datos Sensoriales</span>
-            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">Evaluación y Alfabetización Sensorial</h2>
-            <p class="text-slate-600 max-w-2xl mx-auto text-base">Registra perfiles, estímulos y niveles de atención para generar diagnósticos adaptativos instantáneos respaldados en nuestra base de datos en la nube.</p>
-        </div>
-
-        <!-- Form Card -->
-        <div class="bg-white shadow-xl rounded-2xl border border-slate-100 overflow-hidden p-8 md:p-10">
-            <form action="/guardar" method="POST" class="space-y-6">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Nombre -->
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nombre del Estudiante / Participante</label>
-                        <input type="text" name="nombre_estudiante" required placeholder="Ej. Sofia Martínez" 
-                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
-                    </div>
-
-                    <!-- Edad -->
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Edad</label>
-                        <input type="number" name="edad" required placeholder="Ej. 8" 
-                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
-                    </div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Nombre del Paciente *</label>
+                    <input type="text" name="nombre_paciente" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Condición / Perfil -->
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Perfil / Condición Sensorial</label>
-                        <select name="condicion" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white transition">
-                            <option value="" disabled selected>Seleccione una opción...</option>
-                            <option value="TDAH">TDAH (Déficit de Atención)</option>
-                            <option value="Autismo">Espectro Autista (TEA)</option>
-                            <option value="Desarrollo Típico">Desarrollo Típico / Estándar</option>
-                            <option value="Síndrome de Down">Síndrome de Down</option>
-                        </select>
-                    </div>
+                <!-- Identificación -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Identificación (T.I. / C.C.) *</label>
+                    <input type="text" name="identificacion" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
 
-                    <!-- Kit Sensorial -->
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Kit Sensorial Utilizado</label>
-                        <select name="kit_utilizado" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white transition">
-                            <option value="" disabled selected>Seleccione un kit...</option>
-                            <option value="Kit Táctil (Texturas y Rugosidades)">Kit Táctil (Texturas y Rugosidades)</option>
-                            <option value="Kit Auditivo (Frecuencias y Sonidos)">Kit Auditivo (Frecuencias y Sonidos)</option>
-                            <option value="Kit Visual (Formas y Contraste)">Kit Visual (Formas y Contraste)</option>
-                            <option value="Kit Olfativo (Aromas y Esencias)">Kit Olfativo (Aromas y Esencias)</option>
-                        </select>
-                    </div>
+                <!-- Edad -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Edad *</label>
+                    <input type="number" name="edad" required min="1" max="120" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                <!-- Condición -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Condición *</label>
+                    <select name="condicion" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="">Seleccione una opción...</option>
+                        <option value="TDAH">TDAH</option>
+                        <option value="Autismo">Autismo (TEA)</option>
+                        <option value="Síndrome de Down">Síndrome de Down</option>
+                        <option value="Desarrollo Típico">Desarrollo Típico</option>
+                    </select>
+                </div>
+
+                <!-- Kit Utilizado -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Kit Sensorial Utilizado *</label>
+                    <select name="kit_utilizado" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="">Seleccione un kit...</option>
+                        <option value="Kit Táctil de Alta Textura">Kit Táctil de Alta Textura</option>
+                        <option value="Kit Auditivo y Visual Suave">Kit Auditivo y Visual Suave</option>
+                        <option value="Kit Motriz Fina y Formas">Kit Motriz Fina y Formas</option>
+                        <option value="Kit Dinámico Integral">Kit Dinámico Integral</option>
+                    </select>
                 </div>
 
                 <!-- Nivel de Atención -->
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nivel de Atención / Percepción Observado</label>
-                    <div class="grid grid-cols-3 gap-4">
-                        <label class="border border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition flex flex-col items-center">
-                            <input type="radio" name="nivel_atencion" value="Bajo" required class="mb-2 text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm font-bold text-slate-700">Bajo</span>
-                            <span class="text-xs text-slate-400">Requiere estímulo</span>
-                        </label>
-                        <label class="border border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition flex flex-col items-center">
-                            <input type="radio" name="nivel_atencion" value="Medio" class="mb-2 text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm font-bold text-slate-700">Medio</span>
-                            <span class="text-xs text-slate-400">Respuesta moderada</span>
-                        </label>
-                        <label class="border border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition flex flex-col items-center">
-                            <input type="radio" name="nivel_atencion" value="Alto" class="mb-2 text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm font-bold text-slate-700">Alto</span>
-                            <span class="text-xs text-slate-400">Foco óptimo</span>
-                        </label>
-                    </div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Nivel de Atención Observado *</label>
+                    <select name="nivel_atencion" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="">Seleccione nivel...</option>
+                        <option value="Alto">Alto</option>
+                        <option value="Medio">Medio</option>
+                        <option value="Bajo">Bajo</option>
+                    </select>
                 </div>
 
-                <!-- Observaciones -->
+                <!-- Adulto Responsable -->
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Observaciones Cualitativas del Estímulo</label>
-                    <textarea name="observaciones" rows="3" placeholder="Describa la reacción del participante ante el kit..." 
-                        class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"></textarea>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Adulto Responsable</label>
+                    <input type="text" name="adulto_responsable" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nombre del adulto responsable">
                 </div>
 
-                <!-- Submit Button -->
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-200 transition duration-200 text-center text-base">
-                    Registrar Evaluación y Generar Diagnóstico
+                <!-- Teléfono -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Teléfono de Contacto</label>
+                    <input type="tel" name="telefono" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Ej. 314*******">
+                </div>
+
+                <!-- Contacto de Emergencia -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Contacto de Emergencia</label>
+                    <input type="text" name="contacto_emergencia" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nombre y teléfono de emergencia">
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Correo Electrónico</label>
+                    <input type="email" name="email" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="correo@ejemplo.com">
+                </div>
+            </div>
+
+            <!-- Observaciones -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Observaciones</label>
+                <textarea name="observaciones" rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Describa reacciones o notas relevantes..."></textarea>
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md">
+                    Registrar Evaluación Sensorial
                 </button>
-
-            </form>
+            </div>
+        </form>
+        
+        <div class="text-center mt-6">
+            <a href="/login" class="text-sm text-indigo-600 hover:underline">Acceso Administrativo</a>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-400">
-        <p>SIG-ALFA • Proyecto de Sistemas de Información & Alfabetización Sensorial</p>
-    </footer>
-
+    </div>
 </body>
 </html>

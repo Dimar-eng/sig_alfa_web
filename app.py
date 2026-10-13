@@ -5,24 +5,49 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'sig_alfa_clave_secreta_admin')
 
-# Conexión a la base de datos PostgreSQL
 DATABASE_URL = os.environ.get('DATABASE_URL') or 'postgresql://postgres:DMR007@localhost:5432/sig_alfa'
-def get_db_connection():
-    conn = psycopg2.connect(DATABASE_URL)
-    return conn
 
-# Función para generar diagnóstico inmediato
+def get_db_connection():
+    return psycopg2.connect(DATABASE_URL)
+
+def init_db():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS evaluaciones_sensoriales (
+                id SERIAL PRIMARY KEY,
+                nombre_estudiante VARCHAR(100) NOT NULL,
+                identificacion VARCHAR(50),
+                edad INT NOT NULL,
+                condicion VARCHAR(50) NOT NULL,
+                kit_utilizado VARCHAR(100) NOT NULL,
+                nivel_atencion VARCHAR(20) NOT NULL,
+                adulto_responsable VARCHAR(100),
+                telefono VARCHAR(20),
+                contacto_emergencia VARCHAR(100),
+                email VARCHAR(100),
+                observaciones TEXT,
+                fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"Error inicializando la base de datos: {e}")
+
+init_db()
+
 def calcular_diagnostico(kit, atencion, condicion):
     niveles = {"Alto": 90, "Medio": 65, "Bajo": 40}
     score = niveles.get(atencion, 50)
-    
     recomendaciones = {
         "TDAH": "Se recomienda sesiones cortas de 10-15 min utilizando kits táctiles de alta textura para mantener el foco.",
         "Autismo": "Utilizar estímulos auditivos y visuales de baja intensidad para evitar sobrecarga sensorial.",
         "Desarrollo Típico": "Implementar dinámicas integrales que combinen estimulación visual y motriz fina.",
         "Síndrome de Down": "Reforzar actividades de coordinación oculo-manual mediante kits de formas geométricas."
     }
-    
     rec = recomendaciones.get(condicion, "Mantener seguimiento continuo con los kits de apoyo sensorial.")
     return score, rec
 
@@ -34,10 +59,15 @@ def index():
 def guardar():
     if request.method == 'POST':
         nombre = request.form.get('nombre_estudiante')
+        identificacion = request.form.get('identificacion')
         edad = request.form.get('edad')
         condicion = request.form.get('condicion')
         kit = request.form.get('kit_utilizado')
         atencion = request.form.get('nivel_atencion')
+        adulto = request.form.get('adulto_responsable')
+        telefono = request.form.get('telefono')
+        emergencia = request.form.get('contacto_emergencia')
+        email = request.form.get('email')
         observaciones = request.form.get('observaciones')
         
         score, recomendacion = calcular_diagnostico(kit, atencion, condicion)
@@ -47,9 +77,9 @@ def guardar():
             cur = conn.cursor()
             cur.execute("""
                 INSERT INTO evaluaciones_sensoriales 
-                (nombre_estudiante, edad, condicion, kit_utilizado, nivel_atencion, observaciones)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """, (nombre, edad, condicion, kit, atencion, observaciones))
+                (nombre_estudiante, identificacion, edad, condicion, kit_utilizado, nivel_atencion, adulto_responsable, telefono, contacto_emergencia, email, observaciones)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (nombre, identificacion, edad, condicion, kit, atencion, adulto, telefono, emergencia, email, observaciones))
             conn.commit()
             cur.close()
             conn.close()
